@@ -43,8 +43,10 @@
 <script type="importmap">
 {
   "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
   }
 }
@@ -52,6 +54,422 @@
 </head>
 <body class="bg-dark-900 text-primary-200 antialiased">
     <div id="root"></div>
-    <script type="text/babel" src="./index.tsx"></script>
+    <script type="text/babel" data-presets="react,typescript">
+// From components/icons/WhiteLabelIcon.tsx
+const WhiteLabelIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+  </svg>
+);
+
+// From components/icons/MultiClientIcon.tsx
+const MultiClientIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+  </svg>
+);
+
+// From components/icons/BrainIcon.tsx
+const BrainIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+  </svg>
+);
+
+// From components/icons/ApiIcon.tsx
+const ApiIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+  </svg>
+);
+
+// From components/icons/MouseIcon.tsx
+const MouseIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+  </svg>
+);
+
+// From components/icons/RocketIcon.tsx
+const RocketIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+  </svg>
+);
+
+// From components/ImageModal.tsx
+const ImageModal = ({ imageUrl, onClose }) => {
+  if (!imageUrl) {
+    return null;
+  }
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[999]"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <button 
+        onClick={onClose}
+        className="absolute top-4 right-4 text-white text-4xl hover:text-primary-400 transition-colors z-10"
+        aria-label="Fechar imagem"
+      >
+        &times;
+      </button>
+      <div className="p-4" onClick={(e) => e.stopPropagation()}>
+        <img 
+          src={imageUrl} 
+          alt="Visualização ampliada" 
+          className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl shadow-primary-500/20"
+        />
+      </div>
+    </div>
+  );
+};
+
+// From components/Header.tsx
+const Header = () => {
+  return (
+    <header className="sticky top-0 z-50 bg-dark-900/80 backdrop-blur-sm border-b border-dark-700/50">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="text-2xl font-bold text-white tracking-wider">
+          <span className="bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent">Conex</span>el
+        </div>
+        <a 
+          href="#cta"
+          className="bg-gradient-to-r from-primary-700 to-primary-600 text-white font-semibold px-4 py-2 rounded-lg hover:from-primary-600 hover:to-primary-500 transition-all duration-300 text-sm shadow-md"
+        >
+          Quero desenvolver
+        </a>
+      </div>
+    </header>
+  );
+};
+
+// From components/HeroSection.tsx
+const HeroSection = ({ onImageClick }) => {
+  const imageUrl = 'https://i.postimg.cc/x8qp3XjP/home.png';
+
+  return (
+    <section className="py-20 md:py-32 bg-dark-900 text-center">
+      <div className="container mx-auto px-6">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+          <span className="bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent">Conexel</span> — Transforme dados em decisões inteligentes.
+        </h1>
+        <p className="text-lg md:text-xl text-primary-200 max-w-3xl mx-auto mb-8">
+          A plataforma que coloca agências, consultorias e analistas de dados no controle total de múltiplos clientes — com dashboards interativos, relatórios personalizados e inteligência artificial que pensa junto com você.
+        </p>
+        <a href="#cta" className="inline-block bg-gradient-to-r from-primary-600 to-primary-500 text-white font-bold text-lg px-8 py-4 rounded-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 hover:scale-105 transition-all duration-300">
+          👉 Descubra como a Conexel pode revolucionar sua entrega de resultados.
+        </a>
+        <div 
+          className="mt-16 mx-auto max-w-6xl p-1 bg-gradient-to-br from-primary-700/50 via-dark-800 to-dark-800 rounded-xl shadow-2xl shadow-primary-700/20 cursor-pointer group"
+          onClick={() => onImageClick(imageUrl)}
+          role="button"
+          aria-label="Ampliar imagem do dashboard"
+        >
+          <div className="bg-dark-800 rounded-lg overflow-hidden">
+            <img 
+              src={imageUrl} 
+              alt="Dashboard moderno da Conexel com gráficos e logotipos de clientes"
+              className="rounded-lg w-full h-auto group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// From components/PainPointSection.tsx
+const PainPointSection = () => {
+  return (
+    <section className="py-20 bg-dark-800/50">
+      <div className="container mx-auto px-6 text-center max-w-4xl">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          Você sente que está afogado em planilhas e relatórios manuais?
+        </h2>
+        <p className="text-lg text-primary-200 mb-4">
+          Gerenciar múltiplos clientes, atualizar dados de diversas fontes e criar relatórios personalizados consome tempo, energia e clareza. Cada novo cliente é uma planilha a mais. Cada relatório, uma corrida contra o relógio. E no fim, o que deveria ser insight vira confusão.
+        </p>
+        <p className="text-lg text-white font-semibold">
+          A <span className="bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent font-bold">Conexel</span> nasceu para resolver exatamente isso — e transformar o caos dos dados em inteligência simples, visual e colaborativa.
+        </p>
+      </div>
+    </section>
+  );
+};
+
+// From components/SolutionSection.tsx
+const SolutionSection = ({ onImageClick }) => {
+  const imageUrl = 'https://i.postimg.cc/QCVYJFN4/tema-escuro.png';
+
+  return (
+    <section className="py-20">
+      <div className="container mx-auto px-6">
+        <div className="text-center max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Centralize. Analise. Encante.
+          </h2>
+          <p className="text-lg text-primary-200 mb-8">
+            A Conexel é uma plataforma SaaS de <span className="font-semibold text-primary-400">Business Intelligence</span> projetada para que você possa:
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center max-w-6xl mx-auto mb-12">
+          <div className="p-px bg-gradient-to-b from-primary-700/40 to-dark-800 rounded-lg">
+            <div className="bg-dark-800 p-6 rounded-[7px] h-full">
+              <h3 className="text-xl font-semibold text-white mb-2">Múltiplos clientes</h3>
+              <p className="text-primary-300">Gerencie vários clientes em um só lugar.</p>
+            </div>
+          </div>
+          <div className="p-px bg-gradient-to-b from-primary-700/40 to-dark-800 rounded-lg">
+            <div className="bg-dark-800 p-6 rounded-[7px] h-full">
+              <h3 className="text-xl font-semibold text-white mb-2">Dashboards Drag & Drop</h3>
+              <p className="text-primary-300">Crie dashboards arrastando e soltando componentes.</p>
+            </div>
+          </div>
+          <div className="p-px bg-gradient-to-b from-primary-700/40 to-dark-800 rounded-lg">
+            <div className="bg-dark-800 p-6 rounded-[7px] h-full">
+              <h3 className="text-xl font-semibold text-white mb-2">Conexão via API</h3>
+              <p className="text-primary-300">Conecte dados automaticamente.</p>
+            </div>
+          </div>
+          <div className="p-px bg-gradient-to-b from-primary-700/40 to-dark-800 rounded-lg">
+            <div className="bg-dark-800 p-6 rounded-[7px] h-full">
+              <h3 className="text-xl font-semibold text-white mb-2">IA Integrada</h3>
+              <p className="text-primary-300">Use IA para sugerir gráficos, insights e simular cenários.</p>
+            </div>
+          </div>
+        </div>
+        <div className="text-center text-lg text-white max-w-3xl mx-auto font-medium bg-gradient-to-br from-primary-900/50 via-dark-800 to-dark-800 border border-primary-700/40 p-6 rounded-xl">
+          Tudo isso com uma experiência <span className="font-bold text-primary-300">white-label</span> — o cliente final vê os relatórios com <span className="font-bold">sua marca, suas cores e sua identidade.</span>
+        </div>
+        <div 
+          className="mt-16 mx-auto max-w-5xl p-1 bg-gradient-to-br from-primary-700/50 via-dark-800 to-dark-800 rounded-xl shadow-lg cursor-pointer group"
+          onClick={() => onImageClick(imageUrl)}
+          role="button"
+          aria-label="Ampliar imagem do workspace"
+        >
+           <div className="bg-dark-800 rounded-lg overflow-hidden">
+             <img 
+              src={imageUrl} 
+              alt="Workspace da Conexel com múltiplos clientes em cartões"
+              className="rounded-lg w-full h-auto group-hover:scale-105 transition-transform duration-300"
+            />
+           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// From components/FeaturesSection.tsx
+const FeatureItem = ({ title, description, imageUrl, altText, reverse = false, onImageClick }) => {
+  const flexDirection = reverse ? 'md:flex-row-reverse' : 'md:flex-row';
+  return (
+    <div className={`flex flex-col ${flexDirection} items-center gap-8 md:gap-12`}>
+      <div className="md:w-1/2">
+        <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">{title}</h3>
+        <p className="text-lg text-primary-200">
+          {description}
+        </p>
+      </div>
+      <div 
+        className="md:w-1/2 w-full p-px bg-gradient-to-br from-primary-700/40 to-dark-800/40 rounded-lg shadow-lg cursor-pointer group"
+        onClick={() => onImageClick(imageUrl)}
+        role="button"
+        aria-label={`Ampliar imagem: ${altText}`}
+      >
+        <div className="bg-dark-800 rounded-[7px] overflow-hidden">
+          <img 
+            src={imageUrl} 
+            alt={altText} 
+            className="rounded-md w-full h-auto group-hover:scale-105 transition-transform duration-300" 
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+const features = [
+  {
+    title: '1️⃣ Workspaces Inteligentes – Tudo organizado, cliente por cliente',
+    description: 'Gerencie todos os seus clientes em um painel visual, limpo e intuitivo. Cada cartão é um portal direto para um projeto, com logo, nome e acesso rápido às planilhas e relatórios.',
+    imageUrl: 'https://i.postimg.cc/hvhZ1X4d/clientes.png',
+    altText: 'Tela de Workspaces com cartões de clientes'
+  },
+  {
+    title: '2️⃣ Planilhas Inteligentes – A familiaridade do Excel com o poder da automação',
+    description: 'Nada de copiar e colar manualmente. A Conexel oferece uma planilha interativa com fórmulas, formatações e importação automática de dados. Use fórmulas como em uma planilha comum — mas com recursos muito além de uma.',
+    imageUrl: 'https://i.postimg.cc/D0mpPSf4/editando-planilha.png',
+    altText: 'Grade de planilha com barra de ferramentas',
+    reverse: true,
+  },
+  {
+    title: '3️⃣ Dashboards Drag-and-Drop – Crie visualizações em minutos',
+    description: 'Construa dashboards com um simples movimento de arrastar e soltar. Escolha gráficos, KPIs, tabelas ou widgets de simulação com IA — personalize cores, tamanhos e fontes sem escrever uma linha de código.',
+    imageUrl: 'https://i.postimg.cc/J0tY5s7N/editor-de-dashboard.png',
+    altText: 'Editor de dashboards com paleta de widgets'
+  },
+  {
+    title: '4️⃣ Relatórios Interativos – Entregas que encantam e explicam',
+    description: 'Ofereça aos seus clientes um portal de relatórios totalmente personalizado com a marca deles. Eles podem interagir com gráficos, aplicar filtros e até comentar diretamente sobre os dados, iniciando conversas dentro do contexto.',
+    imageUrl: 'https://i.postimg.cc/D0mpPSf4/editando-planilha.png',
+    altText: 'Tela de relatório com identidade visual do cliente',
+    reverse: true,
+  },
+  {
+    title: '5️⃣ IA Integrada – Insights automáticos e simulações poderosas',
+    description: 'Com o recurso “Sugerir com IA”, a Conexel recomenda os melhores gráficos com base nos seus dados. E com o Modo de Simulação, você e seu cliente podem testar cenários em linguagem natural — “E se o investimento em marketing aumentar 15%?”. A IA responde com uma projeção visual.',
+    imageUrl: 'https://i.postimg.cc/3wVZQt3g/Screenshot-14.png',
+    altText: 'Widget de simulação com IA'
+  }
+];
+const FeaturesSection = ({ onImageClick }) => {
+  return (
+    <section className="py-20 bg-dark-800/50">
+      <div className="container mx-auto px-6">
+        <div className="space-y-20 max-w-6xl mx-auto">
+          {features.map((feature, index) => (
+            <FeatureItem key={index} {...feature} onImageClick={onImageClick} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// From components/BenefitsSection.tsx
+const BenefitCard = ({ icon, title, description }) => {
+  return (
+    <div className="p-px bg-gradient-to-b from-primary-700/30 to-dark-800 rounded-lg transform hover:-translate-y-2 transition-transform duration-300">
+      <div className="bg-dark-800 p-6 rounded-[7px] h-full">
+        <div className="flex items-center mb-4">
+          <div className="bg-gradient-to-br from-primary-700/30 to-primary-800/20 text-primary-400 rounded-lg p-3 mr-4">{icon}</div>
+          <h3 className="text-xl font-bold text-white">{title}</h3>
+        </div>
+        <p className="text-primary-300">{description}</p>
+      </div>
+    </div>
+  );
+};
+const benefits = [
+  { icon: <WhiteLabelIcon />, title: 'White-label total', description: 'Cada cliente vê seu próprio portal com identidade visual personalizada.' },
+  { icon: <MultiClientIcon />, title: 'Multi-cliente em um só lugar', description: 'Gerencie dezenas de empresas sem confusão — tudo centralizado, seguro e organizado.' },
+  { icon: <BrainIcon />, title: 'Inteligência Artificial integrada', description: 'Sugere gráficos, simula cenários e transforma análise de dados em um processo criativo.' },
+  { icon: <ApiIcon />, title: 'Integrações via API', description: 'Conecte CRMs, ERPs e outras fontes em poucos cliques.' },
+  { icon: <MouseIcon />, title: 'Interface intuitiva', description: 'Arraste, solte, configure. Sem código. Sem complicação.' },
+  { icon: <RocketIcon />, title: 'Escalabilidade', description: 'Cresça sem limites — a arquitetura multi-tenant garante performance e segurança.' },
+];
+const BenefitsSection = () => {
+  return (
+    <section className="py-20">
+      <div className="container mx-auto px-6">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-white">
+            Por que a Conexel é diferente:
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {benefits.map((benefit, index) => (
+            <BenefitCard key={index} {...benefit} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// From components/CtaSection.tsx
+const CtaSection = () => {
+  return (
+    <section id="cta" className="py-24 bg-gradient-to-tr from-dark-900 via-primary-900/40 to-dark-900">
+      <div className="container mx-auto px-6 text-center">
+        <h2 className="text-3xl md:text-5xl font-extrabold text-white mb-6">
+          Pronto para transformar a forma como seus clientes enxergam dados?
+        </h2>
+        <p className="text-lg md:text-xl text-primary-200 max-w-3xl mx-auto mb-10">
+          Contrate o desenvolvimento da Conexel e leve para o seu escritório uma plataforma de BI que combina <span className="font-semibold text-primary-300">design, inteligência e eficiência</span> — pronta para o futuro.
+        </p>
+        <a 
+          href="#"
+          className="inline-block bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 text-dark-900 font-bold text-xl px-10 py-5 rounded-lg shadow-lg shadow-primary-500/30 hover:shadow-primary-400/50 transform hover:scale-105 transition-all duration-300"
+        >
+          🚀 Quero desenvolver a Conexel para meu negócio
+        </a>
+      </div>
+    </section>
+  );
+};
+
+// From components/Footer.tsx
+const Footer = () => {
+  return (
+    <footer className="py-16 bg-dark-900">
+      <div className="container mx-auto px-6 text-center">
+        <p className="text-xl md:text-2xl italic text-primary-300 max-w-4xl mx-auto mb-8">
+          Os dados contam histórias. Mas só quem tem as ferramentas certas consegue ouvir o que eles realmente dizem. Com a Conexel, cada número ganha voz, cada gráfico ganha propósito — e cada cliente enxerga o valor do seu trabalho.
+        </p>
+        <div className="w-24 h-px bg-gradient-to-r from-dark-900 via-primary-700 to-dark-900 mx-auto my-10"></div>
+        <div className="text-2xl font-bold text-white tracking-wider mb-4">
+          💫 <span className="bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent">Conex</span>el
+        </div>
+        <p className="text-lg font-semibold text-white">
+          A inteligência por trás de decisões que transformam.
+        </p>
+        <div className="mt-8 text-sm text-primary-400 opacity-60">
+          © {new Date().getFullYear()} Conexel. Todos os direitos reservados.
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+// From App.tsx
+const App = () => {
+  const [modalImage, setModalImage] = React.useState(null);
+
+  const handleOpenModal = (imageUrl) => {
+    setModalImage(imageUrl);
+  };
+
+  const handleCloseModal = () => {
+    setModalImage(null);
+  };
+
+  return (
+    <div className="overflow-x-hidden">
+      <Header />
+      <main>
+        <HeroSection onImageClick={handleOpenModal} />
+        <PainPointSection />
+        <SolutionSection onImageClick={handleOpenModal} />
+        <FeaturesSection onImageClick={handleOpenModal} />
+        <BenefitsSection />
+        <CtaSection />
+      </main>
+      <Footer />
+      <ImageModal imageUrl={modalImage} onClose={handleCloseModal} />
+    </div>
+  );
+};
+
+// From index.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error("Could not find root element to mount to");
+}
+
+const root = ReactDOM.createRoot(rootElement);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+    </script>
 </body>
 </html>
